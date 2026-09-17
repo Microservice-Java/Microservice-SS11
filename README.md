@@ -14,39 +14,46 @@ SS11/
 │   ├── BaoCao_BaiTap1.md
 │   └── src/
 │       ├── main/java/com/storex/orderservice/
-│       │   ├── OrderServiceApplication.java
-│       │   ├── config/AppConfig.java
-│       │   ├── controller/OrderController.java
-│       │   ├── model/OrderEvent.java
-│       │   └── producer/OrderEventProducer.java
-│       ├── main/resources/
-│       │   └── application.yml
 │       └── test/java/com/storex/orderservice/
-│           ├── config/AppConfigTest.java
-│           └── producer/OrderEventProducerTest.java
+├── BaiTap2/
+│   ├── build.gradle
+│   ├── settings.gradle
+│   ├── BaoCao_BaiTap2.md
+│   └── src/
+│       ├── main/java/com/storex/producer/
+│       │   ├── OrderProducerApplication.java
+│       │   ├── config/KafkaTopicConfig.java
+│       │   ├── controller/OrderController.java
+│       │   ├── model/dto/OrderRequest.java
+│       │   ├── model/dto/OrderResponse.java
+│       │   ├── model/event/OrderCreatedEvent.java
+│       │   └── service/OrderEventProducerService.java
+│       └── test/java/com/storex/producer/
+│           └── service/OrderEventProducerServiceTest.java
 └── postman/
-    └── SS11_BaiTap1_Collection.json
+    ├── SS11_BaiTap1_Collection.json
+    └── SS11_BaiTap2_Collection.json
 ```
 
 ---
 
-## 🛠 Điểm nổi bật trong Bài tập 1
+## 📝 Tóm tắt các Bài tập
 
-1. **Chuyển đổi sang Netty Server (Loại bỏ Tomcat - BUG-01)**:
-   - Dùng `spring-boot-starter-webflux` thay thế `spring-boot-starter-web`.
-   - Khởi chạy ứng dụng bằng máy chủ Embedded Netty trên port `8080`.
+### **Bài tập 1**: Khởi tạo Nền tảng Non-blocking và Kết nối Kafka Cluster
+- Dùng `spring-boot-starter-webflux` chạy Netty Server (Port 8080), loại bỏ hoàn toàn Tomcat (BUG-01).
+- Cấu hình WebClient Bean với timeout 5 giây.
+- Kết nối Kafka Broker tại `localhost:9092` với `JsonSerializer` cho Value (BUG-02).
 
-2. **WebClient Bean với Timeout 5 Giây**:
-   - Cấu hình Connect Timeout 5s, Response Timeout 5s, Read/Write Timeout 5s qua Netty `HttpClient`.
-
-3. **Kafka Broker & Value JsonSerializer (BUG-02)**:
-   - Kết nối Kafka Cluster tại `localhost:9092`.
-   - Cấu hình `JsonSerializer` truyền tải đối tượng `OrderEvent` dạng JSON qua Kafka topic `order-events`.
+### **Bài tập 2**: Xây dựng API Đặt hàng Bất đồng bộ (Event Producer)
+- Xây dựng Reactive API `POST /api/v1/orders` trả về HTTP Status 202 Accepted.
+- Khởi tạo và phát sự kiện `order.created` vào Kafka Topic `storex-order-events` (5 Partitions).
+- **BUG-03 FIX**: Truyền `orderId` làm khóa (Key) phân tuyến trong `kafkaTemplate.send("storex-order-events", orderId, event)` để đảm bảo tất cả sự kiện của cùng 1 đơn hàng luôn rơi vào cùng 1 Partition (Ordering Guarantee).
 
 ---
 
-## 🧪 Kết quả Unit Test
+## 🧪 Kết quả Execution Unit Test
 
 ```text
-[BaiTap1] AppConfigTest & OrderEventProducerTest -> All Tests PASSED (BUILD SUCCESSFUL)
+[BaiTap1] AppConfigTest & OrderEventProducerTest     -> PASSED (BUILD SUCCESSFUL)
+[BaiTap2] OrderEventProducerServiceTest (BUG-03 Test) -> PASSED (BUILD SUCCESSFUL)
 ```

@@ -1,0 +1,33 @@
+{
+  "info": {
+    "_postman_id": "ss11-baitap2-collection-id",
+    "name": "SS11 BaiTap2 - Async Order Producer API (HTTP 202)",
+    "description": "Postman Collection for testing SS11 BaiTap2 202 Accepted Async Order Event Producer",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Submit Order Async (HTTP 202 Accepted)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 205,\n  \"productName\": \"Dell XPS 16 Laptop\",\n  \"quantity\": 1,\n  \"totalAmount\": 2499.00\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/orders",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["api", "v1", "orders"]
+        }
+      }
+    }
+  ]
+}

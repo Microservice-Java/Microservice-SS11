@@ -1,0 +1,47 @@
+{
+  "info": {
+    "_postman_id": "ss11-baitap1-collection-id",
+    "name": "SS11 BaiTap1 - Order Service WebFlux Kafka",
+    "description": "Postman Collection for testing SS11 BaiTap1 Reactive Netty Order Service & Kafka Event Producer",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check (Reactive Netty Port 8080)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/orders/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "orders", "health"]
+        }
+      }
+    },
+    {
+      "name": "Create Order & Publish Event to Kafka",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"orderId\": \"ORD-2026-001\",\n  \"userId\": 101,\n  \"productName\": \"Sony WH-1000XM5 Headphones\",\n  \"quantity\": 1,\n  \"totalAmount\": 399.99\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/orders",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "orders"]
+        }
+      }
+    }
+  ]
+}
